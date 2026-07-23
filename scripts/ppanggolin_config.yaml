@@ -1,0 +1,227 @@
+input_parameters:
+    # A tab-separated file listing the genome names, and the fasta
+    # filepath of its genomic sequence(s) (the fastas can be compressed).
+    # One line per genome. This option can be used alone.
+  # fasta: <fasta file>
+    # A tab-separated file listing the genome names, and the gff filepath of its annotations (the
+    # gffs can be compressed). One line per genome. This option can be used alone IF
+    # the fasta sequences are in the gff files, otherwise --fasta needs to be used.
+  # anno: <anno file>
+    # a tab-separated file listing the cluster names, the gene IDs,
+    # and optionally whether they are a fragment or not.
+  # clusters: <clusters file>
+
+general_parameters:
+    # Output directory
+    output: ppanggolin_output_DATE2026-07-23_HOUR12.32.52_PID13144
+    # basename for the output file
+    basename: pangenome
+    # Generate only the HDF5 pangenome file.
+    no_flat_files: False
+    # directory for storing temporary files
+    tmpdir: /var/folders/qv/q1c6vp_n75x4mpsy83r_3qmh0000gr/T
+    # Indicate verbose level (0 for warning and errors only, 1 for info, 2 for debug)
+    # Choices: 0, 1, 2
+    verbose: 1
+    # log output file
+    log: stdout
+    # disables the progress bars
+    disable_prog_bar: False
+    # Force writing in output directory and in pangenome output file.
+    force: False
+
+annotate:
+    # Use to not remove genes overlapping with RNA features.
+    allow_overlap: False
+    # Use to avoid annotating RNA features.
+    norna: False
+    # Kingdom to which the prokaryota belongs to, to know which models to use for rRNA annotation.
+    # Choices: bacteria, archaea
+    kingdom: bacteria
+    # Translation table (genetic code) to use. If not specified and using annotation files (--anno), the translation table information found in the annotation files will be used. Otherwise, the default genetic code 11 will be used.
+    translation_table: 11
+    # In the context of provided annotation, use this option to read pseudogenes. (Default behavior is to ignore them)
+    use_pseudo: False
+    # Allow to force the prodigal procedure. If nothing given, PPanGGOLiN will decide in function of contig length
+    # Choices: single, meta
+    prodigal_procedure: False
+    # Number of available cpus
+    cpu: 1
+
+cluster:
+    # Minimal identity percent for two proteins to be in the same cluster
+    identity: 0.8
+    # Minimal coverage of the alignment for two proteins to be in the same cluster
+    coverage: 0.8
+    # the cluster mode of MMseqs2. 0: Setcover, 1: single linkage (or connected component), 2: CD-HIT-like, 3: CD-HIT-like (lowmem)
+    # Choices: 0, 1, 2, 3
+    mode: 1
+    # DO NOT Use the defragmentation strategy to link potential fragments with their original gene family.
+    no_defrag: False
+    # When reading a clustering result with --clusters, if a gene is not in the provided file it will be placed in a cluster where the gene is the only member.
+    infer_singletons: False
+    # Translation table (genetic code) to use. If not specified, the translation table used when building the pangenome will be used. This can be accessed using 'ppanggolin info'.
+    translation_table: 11
+    # Number of available cpus
+    cpu: 1
+    # Keeping temporary files (useful for debugging).
+    keep_tmp: False
+
+graph:
+    # Positive Number: Remove families having a number of copy of gene in a single genome above or equal to this threshold in at least one genome (0 or negative values are ignored).
+    remove_high_copy_number: 0
+
+partition:
+    # beta is the strength of the smoothing using the graph topology during partitioning. 0 will deactivate spatial smoothing.
+    beta: 2.5
+    # max. degree of the nodes to be included in the smoothing process.
+    max_degree_smoothing: 10
+    # use if the dispersion around the centroid vector of each partition during must be free. It will be the same for all genomes by default.
+    free_dispersion: False
+    # Size of the chunks when performing partitioning using chunks of genomes. Chunk partitioning will be used automatically if the number of genomes is above this number.
+    chunk_size: 500
+    # Number of partitions to use. Must be at least 2. If under 2, it will be detected automatically.
+    nb_of_partitions: -1
+    # Range of K values to test when detecting K automatically.
+    krange: [3, 20]
+    # K is detected automatically by maximizing ICL. However at some point the ICL reaches a plateau. Therefore we are looking for the minimal value of K without significant gain from the larger values of K measured by ICL. For that we take the lowest K that is found within a given 'margin' of the maximal ICL value. Basically, change this option only if you truly understand it, otherwise just leave it be.
+    ICL_margin: 0.05
+    # Use if you want to draw the ICL curve for all the tested K values. Will not be done if K is given.
+    draw_ICL: False
+    # Use if you want to keep the temporary NEM files
+    keep_tmp_files: False
+    # seed used to generate random numbers
+    seed: 42
+    # Number of available cpus
+    cpu: 1
+
+rarefaction:
+    # beta is the strength of the smoothing using the graph topology during  partitioning. 0 will deactivate spatial smoothing.
+    beta: 2.5
+    # Number of samplings at each sampling point
+    depth: 30
+    # Minimum number of genomes in a sample
+    min: 1
+    # Maximum number of genomes in a sample (if above the number of provided genomes, the provided genomes will be the maximum)
+    max: 100
+    # max. degree of the nodes to be included in the smoothing process.
+    max_degree_smoothing: 10
+    # use if the dispersion around the centroid vector of each partition during must be free. It will be the same for all genomes by default.
+    free_dispersion: False
+    # Size of the chunks when performing partitioning using chunks of genomes. Chunk partitioning will be used automatically if the number of genomes is above this number.
+    chunk_size: 500
+    # Number of partitions to use. Must be at least 2. By default reuse K if it exists else compute it.
+    nb_of_partitions: -1
+    #  Will recompute the number of partitions for each sample (between the values provided by --krange) (VERY intensive. Can take a long time.)
+    reestimate_K: False
+    # Range of K values to test when detecting K automatically. Default between 3 and the K previously computed if there is one, or 20 if there are none.
+    krange: [3, -1]
+    # Soft core threshold
+    soft_core: 0.95
+    # seed used to generate random numbers
+    seed: 42
+    # Number of available cpus
+    cpu: 1
+
+rgp:
+    # Penalty score to apply to persistent genes
+    persistent_penalty: 3
+    # Gain score to apply to variable genes
+    variable_gain: 1
+    # Minimal score wanted for considering a region as being a RGP
+    min_score: 4
+    # Minimum length (bp) of a region to be considered a RGP
+    min_length: 3000
+    # Minimum ratio of genomes where the family is present in which the family must have multiple genes for it to be considered 'duplicated'
+    dup_margin: 0.05
+
+spot:
+    # Writes a graph of pairs of blocks of single copy markers flanking RGPs, supposedly belonging to the same hotspot
+    spot_graph: False
+    # The number of 'missing' persistent genes allowed when comparing flanking genes during hotspot computations
+    overlapping_match: 2
+    # Number of single copy markers to use as flanking genes for a RGP during hotspot computation
+    set_size: 3
+    # Number of perfectly matching flanking single copy markers required to associate RGPs during hotspot computation (Ex: If set to 1, two RGPs are in the same hotspot if both their 1st flanking genes are the same)
+    exact_match_size: 1
+    # Format of the output graph.
+    # Choices: gexf, graphml
+    graph_formats: ['gexf']
+
+draw:
+    # draw the tile plot of the pangenome
+    tile_plot: True
+    # Soft core threshold to use
+    soft_core: 0.95
+    # draw the U-curve of the pangenome
+    ucurve: True
+    # draw plots for spots of the pangenome
+    draw_spots: True
+    # a comma-separated list of spots to draw (or 'all' to draw all spots, or 'synteny' to draw spots with different RGP syntenies).
+    spots: all
+    # Do not draw the cloud genes in the tile plot
+    nocloud: False
+    # Include a dendrogram for genomes in the tile plot based on the presence/absence of gene families.
+    add_dendrogram: False
+    # Display gene metadata as hover text for each cell in the tile plot.
+    add_metadata: False
+    # Which source of metadata should be written in the tile plot. By default all metadata sources are included.
+    metadata_sources: False
+
+write_pangenome:
+    # Soft core threshold to use
+    soft_core: 0.95
+    # Minimum ratio of genomes in which the family must have multiple genes for it to be considered 'duplicated'
+    dup_margin: 0.05
+    # Generate a detailed GEXF file with all genes and annotations for each family
+    gexf: True
+    # Generate a simplified GEXF file with basic gene family information
+    light_gexf: True
+    # Export the graph in JSON file format
+    json: True
+    # Export gene presence/absence in CSV format (compatible with Roary). Uses partitions as alternative gene IDs if available.
+    csv: True
+    # Export gene presence/absence as a tabular binary matrix
+    Rtab: True
+    # Generate genome statistics ('genome_statistics.tsv') and duplication summary of persistent families ('mean_persistent_duplication.tsv')
+    stats: True
+    # Generate one file per partition listing the gene families it contains
+    partitions: True
+    # Write a TSV file mapping genes to their corresponding gene families
+    families_tsv: True
+    # Write predicted RGPs (Regions of Genomic Plasticity) and metrics to 'plastic_regions.tsv'
+    regions: True
+    # Write a TSV file mapping each RGP to its gene family content in 'rgp_families.tsv'
+    regions_families: False
+    # Write spot summary and list all RGPs (Regions of Genomic Plasticity) per spot
+    spots: True
+    # List all borders of each spot
+    borders: True
+    # Write a TSV file listing functional modules and their associated gene families
+    modules: True
+    # Generate two files comparing module presence across spots
+    spot_modules: True
+    # Compress output files using gzip (.gz)
+    compress: False
+    # Number of available cpus
+    cpu: 1
+
+write_genomes:
+    # Generate a tsv file for each genome with pangenome annotations.
+    table: True
+    # Generate a gff file for each genome containing pangenome annotations.
+    gff: True
+    # Generate JSON map files for PROKSEE for each genome containing pangenome annotations to be used in proksee.
+    proksee: True
+    # Compress the files in .gz
+    compress: False
+    # Specify the genomes for which to generate output. You can provide a list of genome names either directly in the command line separated by commas, or by referencing a file containing the list of genome names, with one name per line.
+    genomes: all
+    # Include metadata information in the output files if any have been added to pangenome elements (see ppanggolin metadata command).
+    add_metadata: False
+    # Which source of metadata should be written. By default all metadata sources are included.
+    metadata_sources: False
+    # The separator used to join multiple metadata values for elements with multiple metadata values from the same source. This character should not appear in metadata values.
+    metadata_sep: |
+    # Number of available cpus
+    cpu: 1
