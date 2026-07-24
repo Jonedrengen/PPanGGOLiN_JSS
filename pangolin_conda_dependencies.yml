@@ -1,0 +1,11 @@
+name: ppanggolin
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - r
+dependencies:
+  - ppanggolin
+  - python=3.12.11
+  - pytest
+prefix: /opt/anaconda3/envs/ppanggolin
