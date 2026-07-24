@@ -5,7 +5,5 @@ channels:
   - defaults
   - r
 dependencies:
-  - ppanggolin
-  - python=3.12.11
-  - pytest
+  - ppanggolin=2.3.0
 prefix: /opt/anaconda3/envs/ppanggolin
