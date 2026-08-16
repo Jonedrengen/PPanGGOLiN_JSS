@@ -19,7 +19,7 @@ general_parameters:
     # Generate only the HDF5 pangenome file.
     no_flat_files: False
     # directory for storing temporary files
-    tmpdir: /var/folders/qv/q1c6vp_n75x4mpsy83r_3qmh0000gr/T
+    tmpdir: /tmp
     # Indicate verbose level (0 for warning and errors only, 1 for info, 2 for debug)
     # Choices: 0, 1, 2
     verbose: 1

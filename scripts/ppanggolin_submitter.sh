@@ -4,7 +4,10 @@
 
 #this is a submitter script and will run a tool, depending on the mode of operation, either locally or on a SLURM cluster.
 
+
 set -eu
+
+##################### functions #####################
 
 usage() {
     echo
@@ -58,6 +61,8 @@ create_file_system() {
     if [[ ! -d "$output_dir" || ! -d "$output_dir/processing_files" || ! -d "$output_dir/completed_files" ]]; then
         echo "Error: Failed to create necessary directories in '$output_dir'."
         exit 1
+    else
+        echo "Created output directory structure in '$output_dir'."
     fi
 }
 
@@ -194,3 +199,10 @@ fi
 
 #run tool
 start_ppanggolin_runner "$config_file" "$ppanggolin_input_path" "$results_dir" "$mode"
+
+
+
+##################### main #####################
+
+
+
