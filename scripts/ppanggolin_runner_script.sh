@@ -17,10 +17,15 @@ help() {
 ######### functions ###########
 validate_input_options_exist() {
     local input_annotations="$1"
-    local config_file="$2"
+    local output_dir="$2"
+    local config_file="$3"
 
     if [ ! -f "$input_annotations" ]; then
         echo "Error: Input annotations does not exist."
+        exit 1
+    fi
+    if [ -z "$output_dir" ]; then
+        echo "Error: Output directory is not specified."
         exit 1
     fi
     if [ ! -f "$config_file" ]; then
@@ -129,13 +134,15 @@ while getopts "h:i:o:c:" opt; do
     i) input_annotations="$OPTARG" ;;
     o) output_dir="$OPTARG" ;;
     c) config_file="$OPTARG" ;;
-    :) help; exit 1 ;;
     \?) help; exit 1 ;;
-    *) help; exit 1 ;;
     esac
 done
+if [ "$#" -lt 3 ]; then
+    help
+    exit 1
+fi
 
-validate_input_options_exist "$input_annotations" "$config_file"
+validate_input_options_exist "$input_annotations" "$output_dir" "$config_file"
 
 load_config_values "$config_file"
 
