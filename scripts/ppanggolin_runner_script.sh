@@ -17,15 +17,10 @@ help() {
 ######### functions ###########
 validate_input_options_exist() {
     local input_annotations="$1"
-    local output_dir="$2"
-    local config_file="$3"
+    local config_file="$2"
 
     if [ ! -f "$input_annotations" ]; then
         echo "Error: Input annotations does not exist."
-        exit 1
-    fi
-    if [ ! -d "$output_dir" ]; then
-        echo "Error: Output folder does not exist."
         exit 1
     fi
     if [ ! -f "$config_file" ]; then
@@ -36,13 +31,13 @@ validate_input_options_exist() {
 
 load_config_values() {
     local config_file="$1"
-    local conda_source_path
-    local conda_env_name
-    local project_clone_path
-    local mode
-    local cpus
-    local mem
-    local partition
+    conda_source_path=""
+    conda_env_name=""
+    project_clone_path=""
+    mode=""
+    cpus=""
+    mem=""
+    partition=""
 
     # Load configuration values from config_template.env
     conda_source_path=$(grep '^conda_source_path=' "$config_file" | awk -F'=' '{print $2}')
@@ -96,6 +91,7 @@ create_ppanggolin_annotation_cmd() {
     local output_dir="$2"
     local cpus="$3"
     local ppanggolin_config_path="$4"
+    local cmd=()
 
     cmd=(ppanggolin all --anno "$input_annotations" --output "$output_dir" --config "$ppanggolin_config_path" --cpu "${cpus:-1}")
     echo "${cmd[@]}"
@@ -127,17 +123,18 @@ run_cmd_via_slurm() {
 input_annotations=""
 output_dir=""
 config_file=""
-while getopts "h:i:o:c:m:" opt; do
+while getopts "h:i:o:c:" opt; do
     case ${opt} in
     h) help; exit 0 ;;
     i) input_annotations="$OPTARG" ;;
     o) output_dir="$OPTARG" ;;
     c) config_file="$OPTARG" ;;
+    \?) help; exit 1 ;;
     *) help; exit 1 ;;
     esac
 done
 
-validate_input_options_exist "$input_annotations" "$output_dir" "$config_file"
+validate_input_options_exist "$input_annotations" "$config_file"
 
 load_config_values "$config_file"
 
