@@ -129,6 +129,7 @@ while getopts "h:i:o:c:" opt; do
     i) input_annotations="$OPTARG" ;;
     o) output_dir="$OPTARG" ;;
     c) config_file="$OPTARG" ;;
+    :) help; exit 1 ;;
     \?) help; exit 1 ;;
     *) help; exit 1 ;;
     esac
