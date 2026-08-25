@@ -6,7 +6,12 @@
 
 ######### utility functions ###########
 help() {
-    echo "Usage: $0"
+    echo "Usage: $0 -i <input_annotations> -o <output_dir> -c <config_file> [-h]"
+    echo "Options:"
+    echo "  -i <input_annotations> : Path to the input annotations (gff3) file."
+    echo "  -o <output_dir>        : Path to the output directory where results will be saved."
+    echo "  -c <config_file>       : Path to the configuration file (see config_template.env)."
+    echo "  -h                     : Display this help message."
 }
 
 ######### functions ###########
@@ -17,7 +22,6 @@ validate_input_options_exist() {
 
     if [ ! -f "$input_annotations" ]; then
         echo "Error: Input annotations does not exist."
-        echo "provide the annotations generated with bakta. The file should be a line-separated list of paths to gff3 files."
         exit 1
     fi
     if [ ! -d "$output_dir" ]; then
