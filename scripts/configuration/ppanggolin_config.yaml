@@ -28,7 +28,7 @@ general_parameters:
     # disables the progress bars
     disable_prog_bar: False
     # Force writing in output directory and in pangenome output file.
-    force: False
+    force: True
 
 annotate:
     # Use to not remove genes overlapping with RNA features.
