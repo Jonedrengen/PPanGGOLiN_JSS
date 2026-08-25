@@ -150,7 +150,7 @@ activate_conda_env "$conda_source_path" "$conda_env_name"
 
 create_output_structure "$output_dir"
 
-command=$(create_ppanggolin_annotation_cmd "$input_annotations" "$output_dir" "$cpus" "$project_clone_path/scripts/ppanggolin_config.yaml")
+command=$(create_ppanggolin_annotation_cmd "$input_annotations" "$output_dir" "$cpus" "$project_clone_path/scripts/configuration/ppanggolin_config.yaml")
 
 #takes information from config and runs the command via slurm
 run_cmd_via_slurm "$command" "$cpus" "$mem" "$partition" "$job_name" "$output_dir/slurm_output"
